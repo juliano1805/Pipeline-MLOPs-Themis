@@ -1,140 +1,244 @@
-# Pipeline MLOps para Modelo em Produção
+# Pipeline MLOps para Detecção de Fraudes com MLflow, Flask e GitHub Actions
 
 [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/)
 [![MLflow](https://img.shields.io/badge/MLflow-2.22.1-orange.svg)](https://mlflow.org/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![CI/CD Status](https://github.com/juliano1805/Pipeline-MLOPs-Themis/actions/workflows/main.yml/badge.svg)](https://github.com/juliano1805/Pipeline-MLOPs-Themis/actions/workflows/main.yml)
 
-Este projeto implementa um pipeline MLOps para detecção de fraude em transações financeiras, incluindo treinamento, experimentação, versionamento e deploy do modelo.
+> 🧠 Projeto completo de MLOps para detecção de fraudes, com MLflow, Flask, Prometheus, GitHub Actions e testes automatizados.
 
-## Estrutura do Projeto
+---
+
+## 🚀 Sobre o Projeto
+
+Este projeto simula um **pipeline completo de Machine Learning pronto para produção**, com foco em detecção de fraudes em transações financeiras. Foi idealizado como uma vitrine técnica de MLOps e engenharia de modelos, aplicando práticas reais de deploy, monitoramento e versionamento.
+
+### 🔍 Destaques
+
+* **MLflow** para rastreamento, experimentação e registro de modelos.
+* **Flask API** para servir o modelo com endpoint de predição e métricas.
+* **Prometheus** para expor métricas de requisições da API.
+* **GitHub Actions** para CI/CD automatizado.
+* **Logging estruturado e testes com Pytest** para robustez e observabilidade.
+
+💡 Ideal para empresas que buscam profissionais júnior com **base sólida em produção de modelos**, além de habilidades em engenharia e automação.
+
+---
+
+## 🧱 Estrutura do Projeto
 
 ```
 .
-├── data/
-│   ├── raw/           # Dados brutos
-│   └── processed/     # Dados processados
+├── .github/workflows/        # CI/CD com GitHub Actions
+├── data/                     # Dados brutos e processados
 ├── src/
-│   ├── data/         # Scripts de processamento de dados
-│   ├── training/     # Scripts de treinamento
-│   └── serve.py      # Script Python para servir o modelo com Flask
-├── models/           # Modelos salvos (ignorados pelo git)
-├── tests/            # Testes unitários
-├── Dockerfile        # Configuração do container
-└── requirements.txt  # Dependências do projeto
+│   ├── data/                 # Scripts de tratamento
+│   ├── training/             # Treinamento e validação
+│   └── serve.py              # API Flask para inferência
+├── models/                   # Modelos salvos (git-ignored)
+├── tests/                    # Testes com pytest
+├── Dockerfile                # Containerização opcional
+└── requirements.txt          # Dependências
 ```
 
-## Configuração do Ambiente
+---
+
+## ⚙️ Setup do Ambiente
 
 ### Pré-requisitos
-- Python 3.8+
-- pip
 
-### Instalação das Dependências
+* Python 3.9+
+* pip instalado
+
+### Instalar dependências
+
 ```bash
 pip install -r requirements.txt
 ```
 
-## Treinamento do Modelo
+---
 
-### 1. Preparar os Dados
-```powershell
+## 📊 Treinamento e Versionamento de Modelos
+
+### 1. Preparar os dados
+
+```bash
 python src/data/download_data.py
 ```
 
-### 2. Treinar o Modelo
-```powershell
+### 2. Treinar e registrar modelo no MLflow
+
+```bash
 python src/train.py
 ```
 
-O script irá:
-- Realizar validação cruzada
-- Testar diferentes configurações de hiperparâmetros
-- Registrar métricas, parâmetros e artefatos no MLflow
-- Salvar o melhor modelo localmente
+* Cross-validation com grid de hiperparâmetros
+* Registro automático de parâmetros, métricas e artefatos
+* Versionamento no Model Registry do MLflow
 
-## Análise de Experimentos (MLflow UI)
+### Interface MLflow
 
-Após o treinamento, acesse a interface do MLflow para visualizar os experimentos:
-
-```powershell
-mlflow ui --port 51099 --backend-store-uri sqlite:///mlruns/mlflow.db --default-artifact-root mlruns
+```bash
+mlflow ui --port 51099 --backend-store-uri sqlite:///mlruns/mlflow.db
 ```
-Abra no navegador: `http://127.0.0.1:51099`
 
-Na UI do MLflow, você poderá:
-- Comparar os runs e as métricas de cada configuração
-- Visualizar os parâmetros usados em cada treinamento
-- Analisar a matriz de confusão gerada para cada run
+➡️ Acesse: [http://127.0.0.1:51099](http://127.0.0.1:51099)
 
-## Deploy Local do Modelo (API com Flask)
+---
 
-Para disponibilizar o modelo para inferência, usamos um servidor Flask que carrega o modelo salvo.
+## 🌐 Deploy do Modelo via API Flask
 
-### 1. Iniciar o Servidor Flask
-```powershell
+```bash
 python -m src.serve
 ```
-O servidor estará disponível em `http://localhost:5001`.
 
-### 2. Exemplo de Uso da API
+Endpoint local: `http://localhost:5001/predict`
 
-Crie um arquivo `input.json` com os dados de entrada:
+### Exemplo de chamada via JSON
 
 ```json
 {
-  "dataframe_split": {
-    "columns": [
-      "V1", "V2", "V3", "V4", "V5", "V6", "V7", "V8", "V9", "V10",
-      "V11", "V12", "V13", "V14", "V15", "V16", "V17", "V18", "V19", "V20",
-      "V21", "V22", "V23", "V24", "V25", "V26", "V27", "V28", "Amount"
-    ],
-    "data": [
-      [
-        -0.42861348, 0.95758079, 0.40794421, 0.4437166, -0.06109918,
-        -0.12932631, 0.49071077, 0.15858054, -0.27967918, -0.45789647,
-        -0.24430485, 0.15082159, -0.06316279, -0.23118944, -0.19946896,
-        -0.09459392, -0.10804705, -0.03848293, -0.01548058, 0.05286548,
-        -0.10091398, -0.20786938, -0.27503713, -0.20239077, 0.28786937,
-        0.12467389, 0.06312458, 0.06312458, 10.00
-      ]
-    ]
-  }
+  "features": [29 valores com features normalizadas...]
 }
 ```
 
-Envie uma requisição POST:
-```powershell
+### Requisição (PowerShell ou Terminal)
+
+```bash
 Invoke-RestMethod -Uri http://localhost:5001/predict -Method Post -ContentType "application/json" -InFile input.json
 ```
 
-A resposta será a predição do modelo (0 para não fraude, 1 para fraude).
+---
 
-## Monitoramento
+## 📈 Monitoramento com Prometheus
 
-O MLflow fornece:
-- Rastreamento de experimentos
-- Métricas de performance
-- Versionamento de modelos
-- Comparação entre diferentes execuções
+A API expõe o endpoint `/metrics` para ferramentas como o Prometheus coletarem métricas:
 
-## Próximos Passos
+* `http_requests_total`: Total de requisições por status
+* `http_errors_total`: Total de erros por status HTTP
 
-1. Implementar testes automatizados
-2. Configurar CI/CD
-3. Adicionar monitoramento de drift
-4. Implementar retreinamento automático
-5. Adicionar logging e alertas
+---
 
-## 🎯 Objetivo
+## ✅ Testes Automatizados
 
-Criar um pipeline que:
-- Treina modelos de ML de forma reprodutível
-- Versiona experimentos e modelos
-- Disponibiliza o modelo via API REST
-- Monitora performance do modelo
+```bash
+pytest tests/
+```
+
+Cobertura dos testes:
+
+* API de predição
+* Tratamento de erros
+* Comportamentos esperados do modelo
+
+---
+
+## 🔁 CI/CD com GitHub Actions
+
+Cada `push` ou `pull_request` aciona o workflow:
+
+* Checkout do código
+* Instalação do ambiente
+* Execução dos testes
+
+📦 Status: veja o badge no topo
+
+---
+
+## 🎯 Objetivos Técnicos
+
+Este pipeline foi criado para demonstrar:
+
+* 📌 Reprodutibilidade de experimentos com MLflow
+* 📦 Deploy leve com Flask
+* 🧪 Testes automatizados com pytest
+* 🚦 Observabilidade e monitoramento via Prometheus
+* 🔄 Automação de entrega com CI/CD no GitHub
+
+---
 
 ## 📫 Contato
 
-Juliano Matheus - julianomatheusferreira@gmail.com - [GitHub](https://github.com/juliano1805)
+Juliano Matheus
+📧 [julianomatheusferreira@gmail.com](mailto:julianomatheusferreira@gmail.com)
+💼 [LinkedIn](https://www.linkedin.com/in/julianomatheusferreira)
+👨‍💻 [GitHub](https://github.com/juliano1805)
 
-Link do Projeto: [https://github.com/juliano1805/Pipeline-MLOPs-Themis](https://github.com/juliano1805/Pipeline-MLOPs-Themis) 
+Repositório: [https://github.com/juliano1805/Pipeline-MLOPs-Themis](https://github.com/juliano1805/Pipeline-MLOPs-Themis)
+
+## 📊 Resultados
+
+### Métricas do Melhor Modelo
+* **Accuracy**: 0.9995
+* **Precision**: 0.9059
+* **Recall**: 0.7857
+* **F1-Score**: 0.8415
+
+### Validação Cruzada
+* Score médio CV: 0.8299
+* Configuração otimizada:
+  * n_estimators: 200
+  * max_depth: 15
+  * min_samples_split: 3
+  * min_samples_leaf: 1
+  * class_weight: balanced
+
+---
+
+## 🛠️ Tecnologias
+
+### Linguagens e Frameworks
+* Python 3.9+
+* Flask
+* Scikit-learn
+* MLflow 2.22.1
+
+### DevOps e MLOps
+* GitHub Actions
+* Prometheus
+* Docker (opcional)
+
+### Testes e Qualidade
+* Pytest
+* Logging estruturado
+* CI/CD automatizado
+
+---
+
+## 🚀 Próximos Passos
+
+* **Containerização**
+  * Implementação completa com Docker
+  * Configuração de Docker Compose
+  * Documentação de deployment
+
+* **Monitoramento**
+  * Adição de mais métricas de performance
+  * Dashboard com Grafana
+  * Alertas automáticos
+
+* **Testes**
+  * Aumento da cobertura de testes
+  * Testes de integração
+  * Testes de carga
+
+* **CI/CD**
+  * Pipeline de deployment automático
+  * Ambientes de staging
+  * Rollback automático
+
+---
+
+## 🤝 Como Contribuir
+
+1. Faça um Fork do projeto
+2. Crie uma Branch para sua Feature (`git checkout -b feature/AmazingFeature`)
+3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
+4. Push para a Branch (`git push origin feature/AmazingFeature`)
+5. Abra um Pull Request
+
+### Padrões de Código
+* Seguir PEP 8
+* Documentar funções e classes
+* Manter testes atualizados
+* Atualizar documentação
