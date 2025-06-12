@@ -1,4 +1,6 @@
-# Pipeline MLOps para Detecção de Fraudes com MLflow, Flask e GitHub Actions
+# 🛠️ Pipeline MLOPs – Detecção de Fraudes com MLflow, Flask e CI/CD
+
+🚀 Desenvolvido por Juliano Matheus Ferreira da Silva — pipeline completo de MLOps voltado à produção real com foco em boas práticas, automação e rastreabilidade de modelos.
 
 [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/)
 [![MLflow](https://img.shields.io/badge/MLflow-2.22.1-orange.svg)](https://mlflow.org/)
@@ -242,3 +244,8 @@ Repositório: [https://github.com/juliano1805/Pipeline-MLOPs-Themis](https://git
 * Documentar funções e classes
 * Manter testes atualizados
 * Atualizar documentação
+
+## 🙋 Sobre o Autor
+
+Sou apaixonado por engenharia de dados, automação e IA aplicada. Esse projeto nasceu do desejo de conectar conhecimento técnico com boas práticas reais de produção. Atualmente, busco oportunidades na área de engenharia/BI onde eu possa aplicar e expandir esses aprendizados.  
+Mais sobre mim no [LinkedIn](https://www.linkedin.com/in/julianomatheusferreira).
