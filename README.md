@@ -1,4 +1,4 @@
-# 🛠️ Pipeline MLOPs – Detecção de Fraudes com MLflow, Flask e CI/CD
+# 🛠️ Pipeline MLOPs – Detecção de Fraudes com MLflow, Flask e CI/CD, THEMIS
 
 🚀 Desenvolvido por Juliano Matheus Ferreira da Silva — pipeline completo de MLOps voltado à produção real com foco em boas práticas, automação e rastreabilidade de modelos.
 
