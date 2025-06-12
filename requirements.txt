@@ -1,0 +1,34 @@
+# ML e Data Processing
+tensorflow>=2.15.0
+torch>=2.1.0
+pandas>=2.0.0
+numpy>=1.24.0
+scikit-learn>=1.3.0
+pyspark>=3.5.0
+seaborn>=0.13.0
+matplotlib>=3.8.0
+
+# MLOps e Experimentação
+mlflow>=2.8.0
+# kubeflow-pipeline-sdk==2.0.1
+kfp>=2.0.0
+
+# Containerização e Deploy
+docker>=6.1.0
+kubernetes>=8.0.0,<27
+
+# Monitoramento
+prometheus-client>=0.19.0
+grafana-api>=1.0.0
+
+# Desenvolvimento
+pytest>=7.4.0
+black>=23.11.0
+flake8>=6.1.0
+jupyter>=1.0.0
+
+# Utilitários
+python-dotenv>=1.0.0
+pyyaml>=6.0.0
+requests>=2.31.0
+kaggle>=1.5.0 
